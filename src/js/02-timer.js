@@ -84,7 +84,7 @@ function timeInterval() {
     let chosenTime = JSON.parse(localStorage.getItem(KEY));
     let separatedTime = new Date().getTime();
     const difference = chosenTime - separatedTime;
-
+    console.log(difference);
     const newTime = convertMs(difference);
     // console.log(newTime);
 
@@ -95,7 +95,7 @@ function timeInterval() {
     minutesLeft.textContent = minutes;
     secondsLeft.textContent = seconds;
 
-    if (difference < 0) {
+    if (difference < 1000) {
       clearInterval(x);
     }
   }, 1000);
