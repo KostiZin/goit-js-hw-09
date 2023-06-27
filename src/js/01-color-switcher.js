@@ -38,7 +38,4 @@ function handleStopColorChange() {
   clearInterval(timerId);
   btnStart.disabled = false;
   setBtn();
-  // evt.target.disabled = true;
-  // btnStart.style.backgroundColor = '#0c5922';
-  // btnStop.style.backgroundColor = '#a34958';
 }
