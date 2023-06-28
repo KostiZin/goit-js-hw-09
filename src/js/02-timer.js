@@ -8,30 +8,18 @@ const daysLeft = document.querySelector('[data-days]');
 const hoursLeft = document.querySelector('[data-hours]');
 const minutesLeft = document.querySelector('[data-minutes]');
 const secondsLeft = document.querySelector('[data-seconds]');
-const timerEl = document.querySelector('.timer');
 
 // just design =======
-btn.style.color = 'white';
-btn.style.backgroundColor = '#f59c90';
-btn.style.height = '35px';
-btn.style.width = '60px';
-btn.style.borderRadius = '5px';
-
-timePicker.style.height = '35px';
-timePicker.style.fontSize = '16px';
-
-daysLeft.style.fontSize = '30px';
-hoursLeft.style.fontSize = '30px';
-minutesLeft.style.fontSize = '30px';
-secondsLeft.style.fontSize = '30px';
-
-timerEl.style.display = 'flex';
-timerEl.style.gap = '20px';
-
+btn.classList.add('button-countdown');
+timePicker.classList.add('time-picker');
+daysLeft.classList.add('time-digits');
+hoursLeft.classList.add('time-digits');
+minutesLeft.classList.add('time-digits');
+secondsLeft.classList.add('time-digits');
 // =============
 
-let KEY = 'chosen-time';
 let currentTime = new Date().getTime();
+let chosenTime;
 
 const options = {
   position: 'auto',
@@ -42,35 +30,28 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     console.log(selectedDates[0]);
+    chosenTime = new Date(selectedDates[0]).getTime();
+
+    if (chosenTime < currentTime) {
+      btn.style.backgroundColor = '#f59c90';
+      return Notiflix.Notify.failure('Please choose a date in the future');
+    } else {
+      btn.disabled = false;
+      btn.style.backgroundColor = '#206910';
+    }
   },
 };
 
 flatpickr(timePicker, options);
 btn.disabled = true;
 
-timePicker.addEventListener('input', handlePickTime);
-
-function handlePickTime(evt) {
-  let timeEvtValue = new Date(evt.target.value).getTime();
-
-  if (timeEvtValue < currentTime) {
-    btn.style.backgroundColor = '#f59c90';
-    return Notiflix.Notify.failure('Please choose a date in the future');
-  } else {
-    btn.disabled = false;
-    btn.style.backgroundColor = '#206910';
-    localStorage.setItem(KEY, JSON.stringify(timeEvtValue));
-  }
-}
-
 btn.addEventListener('click', timeInterval);
 
 function timeInterval() {
   let countdown = setInterval(function () {
-    let chosenTime = JSON.parse(localStorage.getItem(KEY));
     let separatedTime = new Date().getTime();
     const difference = chosenTime - separatedTime;
-    console.log(difference);
+
     const newTime = convertMs(difference);
 
     const { days, hours, minutes, seconds } = newTime;
